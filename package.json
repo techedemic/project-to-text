@@ -1,0 +1,76 @@
+{
+  "name": "project-to-text",
+  "displayName": "project-to-text",
+  "description": "Export all files in your project to a single text file for uploading to an LLM",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/techedemic/project-to-text.git"
+  },
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "project-to-text.exportToText",
+        "title": "Export Project to Text"
+      }
+    ],
+    "configuration": {
+      "title": "Project To Text",
+      "properties": {
+        "projectToText.respectGitignore": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to respect .gitignore rules when exporting files"
+        },
+        "projectToText.createFile": {
+          "type": "boolean",
+          "default": true,
+          "description": "Create an export file"
+        },
+        "projectToText.copyToClipboard": {
+          "type": "boolean",
+          "default": false,
+          "description": "Copy the exported content to clipboard"
+        },
+        "projectToText.maxFileSizeMB": {
+          "type": "number",
+          "default": 5,
+          "description": "Maximum file size in MB to process"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.16.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "clipboardy": "^4.0.0",
+    "ignore": "^7.0.0"
+  },
+  "publisher": "techedemic",
+  "license": "MIT"
+}
