@@ -41,18 +41,18 @@ File 1:
 Filename: ./relative/path/to/file1
 >----------<
 Body:
-```
-[contents of file1]
-```
+
+[contents of file1 in backticks ``` ```]
+
 
 File 2:
 >----------<
 Filename: ./relative/path/to/file2
 >----------<
 Body:
-```
-[contents of file2]
-```
+
+[contents of file2 in backticks ``` ```]
+
 ```
 
 ## File Handling

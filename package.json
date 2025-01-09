@@ -2,7 +2,7 @@
   "name": "project-to-text",
   "displayName": "project-to-text",
   "description": "Export all files in your project to a single text file for uploading to an LLM",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -44,6 +44,24 @@
           "type": "number",
           "default": 5,
           "description": "Maximum file size in MB to process"
+        },
+        "projectToText.ignoreFiles": {
+          "type": "array",
+          "default": ["package-lock.json"],
+          "description": "List of specific filenames to ignore"
+        },
+        "projectToText.ignoreExtensions": {
+          "type": "array",
+          "default": [
+            "exe", "dll", "so", "dylib", "bin",
+            "zip", "rar", "gz", "tar", "7z", "br",
+            "jpg", "jpeg", "png", "gif", "bmp", "ico", "webp", "avif",
+            "mp3", "wav", "ogg", "mp4", "avi", "mov", "webm",
+            "ttf", "otf", "eot", "woff", "woff2",
+            "pdf", "doc", "docx", "ppt", "pptx", "xls", "xlsx",
+            "sqlite", "db", "pyc", "class", "o"
+          ],
+          "description": "List of file extensions to ignore"
         }
       }
     }

@@ -49,27 +49,11 @@ function normalizePath(filePath: string): string {
     return filePath.split(path.sep).join('/');
 }
 
-// Common binary file extensions
-const BINARY_EXTENSIONS = new Set([
-    // Compiled
-    'exe', 'dll', 'so', 'dylib', 'bin',
-    // Compressed
-    'zip', 'rar', 'gz', 'tar', '7z', 'br',
-    // Images
-    'jpg', 'jpeg', 'png', 'gif', 'bmp', 'ico', 'webp', 'avif',
-    // Audio/Video
-    'mp3', 'wav', 'ogg', 'mp4', 'avi', 'mov', 'webm',
-    // Fonts
-    'ttf', 'otf', 'eot', 'woff', 'woff2',
-    // Documents
-    'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx',
-    // Other
-    'sqlite', 'db', 'pyc', 'class', 'o'
-]);
 
-function shouldExcludeFile(filePath: string, relativePath: string, ig: any, respectGitignore: boolean = true): boolean {
-    // First check gitignore rules if enabled
-    if (respectGitignore) {
+
+function shouldExcludeFile(filePath: string, relativePath: string, ig: any, config: vscode.WorkspaceConfiguration): boolean {
+    // Check gitignore rules if enabled
+    if (config.get<boolean>('respectGitignore', true)) {
         const normalizedPath = normalizePath(relativePath);
         if (ig.ignores(normalizedPath)) {
             console.log(`Gitignore rule matched: ${normalizedPath}`);
@@ -77,10 +61,18 @@ function shouldExcludeFile(filePath: string, relativePath: string, ig: any, resp
         }
     }
 
-    // Check file extension
+    // Check ignored files list
+    const ignoreFiles = config.get<string[]>('ignoreFiles', []);
+    if (ignoreFiles.includes(path.basename(filePath))) {
+        console.log(`Ignored file matched: ${relativePath}`);
+        return true;
+    }
+
+    // Check ignored extensions
     const ext = path.extname(filePath).toLowerCase().slice(1);
-    if (BINARY_EXTENSIONS.has(ext)) {
-        console.log(`Binary extension detected: ${relativePath}`);
+    const ignoreExtensions = config.get<string[]>('ignoreExtensions', []);
+    if (ignoreExtensions.includes(ext)) {
+        console.log(`Ignored extension detected: ${relativePath}`);
         return true;
     }
 
@@ -138,7 +130,7 @@ export function activate(context: vscode.ExtensionContext) {
                     const fullPath = path.join(dirPath, entry.name);
                     const relativePath = path.relative(rootPath, fullPath);
 
-                    if (shouldExcludeFile(fullPath, relativePath, ig, respectGitignore)) {
+                    if (shouldExcludeFile(fullPath, relativePath, ig, config)) {
                         skippedGitignore++;
                         continue;
                     }
